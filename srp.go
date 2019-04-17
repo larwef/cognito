@@ -28,7 +28,7 @@ type srp struct {
 	xA *big.Int
 }
 
-func newSrp() (*srp, error) {
+func newSrp(privateKey *big.Int) (*srp, error) {
 	s := &srp{}
 	var ok bool
 	if s.xN, ok = big.NewInt(0).SetString(nHex, 16); !ok {
@@ -37,17 +37,22 @@ func newSrp() (*srp, error) {
 	if s.g, ok = big.NewInt(0).SetString(gHex, 16); !ok {
 		return nil, fmt.Errorf("error parsing gHex to big.Int. gHex: %s", gHex)
 	}
-
 	str, err := hex.DecodeString("00" + nHex + "0" + gHex)
 	if err != nil {
-		return nil, fmt.Errorf("error cmputing k value: %v", err)
+		return nil, fmt.Errorf("error computing k value: %v", err)
 	}
 
 	s.k = big.NewInt(0).SetBytes(hash(str))
-	s.a = s.generatePrivateKey()
-	s.xA = big.NewInt(0).Exp(s.g, s.a, s.xN)
+	s.a = privateKey
+	s.xA = big.NewInt(0).Exp(s.g, privateKey, s.xN)
 
 	return s, nil
+}
+
+func generatePrivateKey() *big.Int {
+	b := make([]byte, nBits/8)
+	rand.Read(b)
+	return big.NewInt(0).SetBytes(b)
 }
 
 func (s *srp) getA() *big.Int {
@@ -62,12 +67,6 @@ func (s *srp) getSignature(userpoolName, username, password, timestamp string, s
 	mac.Write(secretBlock)
 	mac.Write([]byte(timestamp))
 	return base64.StdEncoding.EncodeToString(mac.Sum(nil)), nil
-}
-
-func (s *srp) generatePrivateKey() *big.Int {
-	b := make([]byte, nBits/8)
-	rand.Read(b)
-	return big.NewInt(0).SetBytes(b)
 }
 
 func (s *srp) getKey(userpoolName, username, password string, xB, salt *big.Int) []byte {

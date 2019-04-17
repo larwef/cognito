@@ -37,13 +37,13 @@ func TestTokenSource(t *testing.T) {
 	}
 
 	// Run tests
-	token := testForceChangePassword(t, tokenSource)
-	token = testRefreshWithToken(t, token, tokenSource)
-	token = testGetExistingToken(t, token, tokenSource)
-	token = testRefreshWithoutToken(t, token, tokenSource)
+	token := forceChangePassword(t, tokenSource)
+	token = refreshWithToken(t, token, tokenSource)
+	token = getExistingToken(t, token, tokenSource)
+	token = refreshWithoutToken(t, token, tokenSource)
 }
 
-func testForceChangePassword(t *testing.T, ts *cognito.TokenSource) *cognito.Token {
+func forceChangePassword(t *testing.T, ts *cognito.TokenSource) *cognito.Token {
 	token, err := ts.GetToken()
 	if err != nil {
 		t.Errorf("Error getting token: %v", err)
@@ -52,7 +52,7 @@ func testForceChangePassword(t *testing.T, ts *cognito.TokenSource) *cognito.Tok
 	return token
 }
 
-func testGetExistingToken(t *testing.T, token *cognito.Token, ts *cognito.TokenSource) *cognito.Token {
+func getExistingToken(t *testing.T, token *cognito.Token, ts *cognito.TokenSource) *cognito.Token {
 	oldAccessToken := token.AccessToken
 
 	token, err := ts.GetToken()
@@ -67,7 +67,7 @@ func testGetExistingToken(t *testing.T, token *cognito.Token, ts *cognito.TokenS
 	return token
 }
 
-func testRefreshWithToken(t *testing.T, token *cognito.Token, ts *cognito.TokenSource) *cognito.Token {
+func refreshWithToken(t *testing.T, token *cognito.Token, ts *cognito.TokenSource) *cognito.Token {
 	// Set expiration to trigger refresh.
 	token.Expiration = time.Now().Add(-1 * time.Second)
 
@@ -85,7 +85,7 @@ func testRefreshWithToken(t *testing.T, token *cognito.Token, ts *cognito.TokenS
 	return token
 }
 
-func testRefreshWithoutToken(t *testing.T, token *cognito.Token, ts *cognito.TokenSource) *cognito.Token {
+func refreshWithoutToken(t *testing.T, token *cognito.Token, ts *cognito.TokenSource) *cognito.Token {
 	// Set expiration to trigger refresh.
 	token.Expiration = time.Now().Add(-1 * time.Second)
 	// Make sure the RefreshToken is empty so a new authentication is performed.

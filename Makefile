@@ -8,7 +8,7 @@ test:
 	go test ./... -v
 
 integration:
-	go test ./... -tags=integration
+	go test ./... -v -tags=integration
 
 coverage:
 	go test ./... -coverprofile=coverage.out

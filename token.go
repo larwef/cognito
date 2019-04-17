@@ -87,7 +87,7 @@ func (ts *TokenSource) GetToken() (*Token, error) {
 }
 
 func (ts *TokenSource) authenticate() (*cip.AuthenticationResultType, error) {
-	s, err := newSrp()
+	s, err := newSrp(generatePrivateKey())
 	if err != nil {
 		return nil, fmt.Errorf("error initiating srp: %v", err)
 	}
@@ -154,7 +154,7 @@ func (ts *TokenSource) respondPasswordVerifier(initAuthResponse *cip.InitiateAut
 
 	signature, err := s.getSignature(ts.userpoolName, ts.config.Username, ts.config.Password, dateStr, salt, xB, secretBlock)
 	if err != nil {
-		return nil, fmt.Errorf("Error getting signature value: %v", err)
+		return nil, fmt.Errorf("error getting signature value: %v", err)
 	}
 
 	params := &cognitoidentityprovider.RespondToAuthChallengeInput{
