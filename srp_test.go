@@ -96,7 +96,7 @@ func TestSrp(t *testing.T) {
 
 		signature, err := s.getSignature(elem.userPoolName, elem.username, elem.password, elem.timestamp, salt, xB, secretBlock)
 		if err != nil {
-			t.Errorf("get returned an error: %v", err)
+			t.Errorf("getSignature returned an error: %v", err)
 		}
 
 		if signature != elem.signature {

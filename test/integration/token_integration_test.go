@@ -11,13 +11,13 @@ import (
 
 // Run integrationtest with a fresh Cognito user which needs FORCE_CHANGE_PASSWORD.
 
-var userpoolID = ""
-var clientID = ""
-var username = ""
-var password = ""
-var region = "eu-west-1"
-
 func TestTokenSource(t *testing.T) {
+	var userpoolID = ""
+	var clientID = ""
+	var username = ""
+	var password = ""
+	var region = "eu-west-1"
+
 	// Setup
 	awsConf := &aws.Config{
 		Region: aws.String(region),

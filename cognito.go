@@ -20,11 +20,11 @@ type Config struct {
 func (c *Config) Client() (*http.Client, error) {
 	ts, err := NewTokenSource(c)
 	if err != nil {
-		return nil, fmt.Errorf("error getting Token source: %v", err)
+		return nil, fmt.Errorf("error getting TokenSource: %v", err)
 	}
 	return &http.Client{
-		Transport: &transport{
-			tknSrc: ts,
+		Transport: &Transport{
+			Source: ts,
 		},
 	}, nil
 }
