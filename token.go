@@ -36,7 +36,8 @@ func (t *Token) updateToken(authenticationResult *cip.AuthenticationResultType) 
 }
 
 func (t *Token) setAuthHeader(r *http.Request) {
-	r.Header.Set("Authorization", t.TokenType+" "+t.AccessToken)
+	//r.Header.Set("Authorization", t.TokenType+" "+t.IDToken)
+	r.Header.Set("Authorization", t.IDToken)
 }
 
 // TokenSource handles the retrieval and refreshing of tokens

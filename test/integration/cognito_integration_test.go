@@ -16,8 +16,8 @@ func TestCognito(t *testing.T) {
 	var clientID = ""
 	var username = ""
 	var password = ""
-	var region = ""
-	var testURL = "eu-west-1"
+	var region = "eu-west-1"
+	var testURL = ""
 
 	// Setup
 	awsConf := &aws.Config{
@@ -45,6 +45,10 @@ func TestCognito(t *testing.T) {
 	res, err := client.Do(req)
 	if err != nil {
 		t.Errorf("error from %s: %v", req.Method, err)
+	}
+
+	if res.StatusCode < 200 || res.StatusCode > 299 {
+		t.Errorf("response was outside http 200 range. Status code: %d received", res.StatusCode)
 	}
 
 	payloadBytes, err := ioutil.ReadAll(res.Body)
