@@ -86,6 +86,11 @@ func TestJWTVerifier_Parse(t *testing.T) {
 	if err != nil {
 		t.Errorf("parse returned an error: %v", err)
 	}
+
+	_, err = verifier.parse("Bearer "+validSignatureTestToken, time.Unix(1555709234, 0))
+	if err != nil {
+		t.Errorf("parse returned an error: %v", err)
+	}
 }
 
 func TestJWTVerifier_Parse_NonMatchingIssuer(t *testing.T) {

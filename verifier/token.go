@@ -25,6 +25,10 @@ type JWTHeader struct {
 
 // ParseJWT parses a token string to a JWTToken object. Returns a JWTToken object and nil if successful. Otherwise a nil and an error.
 func ParseJWT(token string) (*JWTToken, error) {
+	if strings.Contains(token, "Bearer ") {
+		token = token[7:]
+	}
+
 	split := strings.Split(token, ".")
 	if len(split) < 3 {
 		return nil, errors.New("uanble to parse token. Not enough elements after split")
