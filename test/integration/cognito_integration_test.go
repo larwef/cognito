@@ -1,9 +1,11 @@
+// +build integration
+
 package integration
 
 import (
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/larwef/cognito"
+	"github.com/larwef/cognito/client"
 	"io/ioutil"
 	"net/http"
 	"testing"
@@ -24,7 +26,7 @@ func TestCognito(t *testing.T) {
 		Region: aws.String(region),
 	}
 
-	conf := &cognito.Config{
+	conf := &client.Config{
 		UserpoolID: userpoolID,
 		ClientID:   clientID,
 		Username:   username,

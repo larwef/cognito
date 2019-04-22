@@ -1,4 +1,4 @@
-package cognito
+package client
 
 import (
 	"crypto"

@@ -4,7 +4,7 @@ package integration
 
 import (
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/larwef/cognito"
+	"github.com/larwef/cognito/client"
 	"testing"
 	"time"
 )
@@ -23,7 +23,7 @@ func TestTokenSource(t *testing.T) {
 		Region: aws.String(region),
 	}
 
-	conf := &cognito.Config{
+	conf := &client.Config{
 		UserpoolID: userpoolID,
 		ClientID:   clientID,
 		Username:   username,
@@ -31,7 +31,7 @@ func TestTokenSource(t *testing.T) {
 		AWSConfig:  awsConf,
 	}
 
-	tokenSource, err := cognito.NewTokenSource(conf)
+	tokenSource, err := client.NewTokenSource(conf)
 	if err != nil {
 		t.Errorf("Error getting TokenSource: %v", err)
 	}
@@ -43,7 +43,7 @@ func TestTokenSource(t *testing.T) {
 	token = refreshWithoutToken(t, token, tokenSource)
 }
 
-func forceChangePassword(t *testing.T, ts *cognito.TokenSource) *cognito.Token {
+func forceChangePassword(t *testing.T, ts *client.TokenSource) *client.Token {
 	token, err := ts.GetToken()
 	if err != nil {
 		t.Errorf("Error getting token: %v", err)
@@ -52,7 +52,7 @@ func forceChangePassword(t *testing.T, ts *cognito.TokenSource) *cognito.Token {
 	return token
 }
 
-func getExistingToken(t *testing.T, token *cognito.Token, ts *cognito.TokenSource) *cognito.Token {
+func getExistingToken(t *testing.T, token *client.Token, ts *client.TokenSource) *client.Token {
 	oldAccessToken := token.AccessToken
 
 	token, err := ts.GetToken()
@@ -67,7 +67,7 @@ func getExistingToken(t *testing.T, token *cognito.Token, ts *cognito.TokenSourc
 	return token
 }
 
-func refreshWithToken(t *testing.T, token *cognito.Token, ts *cognito.TokenSource) *cognito.Token {
+func refreshWithToken(t *testing.T, token *client.Token, ts *client.TokenSource) *client.Token {
 	// Set expiration to trigger refresh.
 	token.Expiration = time.Now().Add(-1 * time.Second)
 
@@ -85,7 +85,7 @@ func refreshWithToken(t *testing.T, token *cognito.Token, ts *cognito.TokenSourc
 	return token
 }
 
-func refreshWithoutToken(t *testing.T, token *cognito.Token, ts *cognito.TokenSource) *cognito.Token {
+func refreshWithoutToken(t *testing.T, token *client.Token, ts *client.TokenSource) *client.Token {
 	// Set expiration to trigger refresh.
 	token.Expiration = time.Now().Add(-1 * time.Second)
 	// Make sure the RefreshToken is empty so a new authentication is performed.
