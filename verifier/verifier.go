@@ -121,14 +121,14 @@ func (jv *JWTVerifier) getPublicKeys() error {
 
 	keysURL := jv.Issuer + "/.well-known/jwks.json"
 	res, err := jv.Client.Get(keysURL)
-	if err != nil {
-		return fmt.Errorf("unable to get keysRes from %s. Error: %v", keysURL, err)
+	if err != nil || (res.StatusCode < 200 || res.StatusCode > 299) {
+		return fmt.Errorf("unable to get keysRes from %s. Http statuscode: %d. Error: %v", keysURL, res.StatusCode, err)
 	}
 	defer res.Body.Close()
 
 	var keysRes keyResp
 	if err := json.NewDecoder(res.Body).Decode(&keysRes); err != nil {
-		return err
+		return fmt.Errorf("unable to unmarshal JWKS response from issuer: %v", err)
 	}
 
 	if len(keysRes.Keys) < 1 {
