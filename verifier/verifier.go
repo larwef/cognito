@@ -94,11 +94,10 @@ func (jv *JWTVerifier) verifySignature(token *JWTToken) error {
 		return ErrMissingPublicKey
 	}
 
-	split := strings.Split(token.Raw, ".")
 	h := sha256.New()
-	h.Write([]byte(split[0]))
+	h.Write([]byte(token.RawHeader))
 	h.Write([]byte("."))
-	h.Write([]byte(split[1]))
+	h.Write([]byte(token.RawPayload))
 
 	err := rsa.VerifyPKCS1v15(key.pubKey, crypto.SHA256, h.Sum(nil), token.Signature)
 	if err != nil {
@@ -132,7 +131,7 @@ func (jv *JWTVerifier) getPublicKeys() error {
 	for _, key := range keysRes.Keys {
 		nBytes, err := decodeWithPadding(key.N)
 		if err != nil {
-			return fmt.Errorf("error parsing public key modulu(n): %v", err)
+			return fmt.Errorf("error parsing public key modulo(n): %v", err)
 		}
 
 		eBytes, err := decodeWithPadding(key.E)
@@ -150,7 +149,7 @@ func (jv *JWTVerifier) getPublicKeys() error {
 	return nil
 }
 
-// Pads before decoding if neccessary
+// Pads before decoding if necessary
 func decodeWithPadding(encoded string) ([]byte, error) {
 	if l := len(encoded) % 4; l > 0 {
 		encoded += strings.Repeat("=", 4-l)

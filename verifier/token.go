@@ -11,10 +11,11 @@ import (
 
 // JWTToken represents a token sent by a client.
 type JWTToken struct {
-	Raw       string
-	Header    JWTHeader
-	Claims    map[string]interface{}
-	Signature []byte
+	Header     JWTHeader
+	Claims     map[string]interface{}
+	RawHeader  string
+	RawPayload string
+	Signature  []byte
 }
 
 // JWTHeader holds the header information of the jwt token.
@@ -25,9 +26,7 @@ type JWTHeader struct {
 
 // ParseJWT parses a token string to a JWTToken object. Returns a JWTToken object and nil if successful. Otherwise a nil and an error.
 func ParseJWT(token string) (*JWTToken, error) {
-	if strings.Contains(token, "Bearer ") {
-		token = token[7:]
-	}
+	token = strings.TrimPrefix(token, "Bearer ")
 
 	split := strings.Split(token, ".")
 	if len(split) < 3 {
@@ -60,10 +59,11 @@ func ParseJWT(token string) (*JWTToken, error) {
 	}
 
 	return &JWTToken{
-		Raw:       token,
-		Header:    header,
-		Claims:    payload,
-		Signature: signatureBytes,
+		Header:     header,
+		Claims:     payload,
+		Signature:  signatureBytes,
+		RawHeader:  split[0],
+		RawPayload: split[1],
 	}, nil
 }
 
