@@ -16,6 +16,8 @@ import (
 	"github.com/google/uuid"
 )
 
+const timestampFormat string = "Mon Jan 2 15:04:05 MST 2006"
+
 // Token holds the credentials received from Cognito
 type Token struct {
 	AccessToken  string
@@ -151,7 +153,7 @@ func (ts *TokenSource) respondPasswordVerifier(initAuthResponse *cip.InitiateAut
 		return nil, fmt.Errorf("error parsing secret block: %s", *initAuthResponse.ChallengeParameters["SECRET_BLOCK"])
 	}
 
-	dateStr := time.Now().UTC().Format("Mon Jan 2 15:04:05 MST 2006")
+	dateStr := time.Now().UTC().Format(timestampFormat)
 
 	signature, err := s.getSignature(ts.userpoolName, ts.config.Username, ts.config.Password, dateStr, salt, xB, secretBlock)
 	if err != nil {

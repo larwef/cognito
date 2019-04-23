@@ -29,6 +29,9 @@ var (
 
 	// ErrUnexpectedAlg is returned when a token with unsupported signing method is received.
 	ErrUnexpectedAlg = errors.New("unexpected signing algorithm. Currently only RS256 is supported")
+
+	// ErrNoPublicKeysFound is returned if the response from the keys endpoint is empty for any reason.
+	ErrNoPublicKeysFound = errors.New("found no public keys")
 )
 
 type key struct {
@@ -128,22 +131,28 @@ func (jv *JWTVerifier) getPublicKeys() error {
 		return err
 	}
 
+	if len(keysRes.Keys) < 1 {
+		return ErrNoPublicKeysFound
+	}
+
 	for _, key := range keysRes.Keys {
-		nBytes, err := decodeWithPadding(key.N)
-		if err != nil {
-			return fmt.Errorf("error parsing public key modulo(n): %v", err)
-		}
+		if key.Use == "sig" {
+			nBytes, err := decodeWithPadding(key.N)
+			if err != nil {
+				return fmt.Errorf("error parsing public key modulo(n): %v", err)
+			}
 
-		eBytes, err := decodeWithPadding(key.E)
-		if err != nil {
-			return fmt.Errorf("error parsing public key exponential(e): %v", err)
-		}
+			eBytes, err := decodeWithPadding(key.E)
+			if err != nil {
+				return fmt.Errorf("error parsing public key exponential(e): %v", err)
+			}
 
-		key.pubKey = &rsa.PublicKey{
-			N: big.NewInt(0).SetBytes(nBytes),
-			E: int(big.NewInt(0).SetBytes(eBytes).Int64()),
+			key.pubKey = &rsa.PublicKey{
+				N: big.NewInt(0).SetBytes(nBytes),
+				E: int(big.NewInt(0).SetBytes(eBytes).Int64()),
+			}
+			jv.keys[key.Kid] = key
 		}
-		jv.keys[key.Kid] = key
 	}
 
 	return nil
