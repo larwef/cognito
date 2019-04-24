@@ -1,6 +1,7 @@
 package client
 
 import (
+	"context"
 	"encoding/base64"
 	"fmt"
 	"math/big"
@@ -42,6 +43,12 @@ func (t *Token) setAuthHeader(r *http.Request) {
 	r.Header.Set("Authorization", t.IDToken)
 }
 
+func (t *Token) getRequestMetadata() map[string]string {
+	metadata := make(map[string]string)
+	metadata["Authorization"] = t.TokenType + " " + t.IDToken
+	return metadata
+}
+
 // TokenSource handles the retrieval and refreshing of tokens
 type TokenSource struct {
 	config           *Config
@@ -64,6 +71,21 @@ func NewTokenSource(conf *Config) (*TokenSource, error) {
 	}
 
 	return ts, nil
+}
+
+// GetRequestMetadata is used to implement PerRPCCredentials interface.
+func (ts *TokenSource) GetRequestMetadata(ctx context.Context, uri ...string) (map[string]string, error) {
+	token, err := ts.GetToken()
+	if err != nil {
+		return nil, err
+	}
+
+	return token.getRequestMetadata(), nil
+}
+
+// RequireTransportSecurity is used to implement PerRPCCredentials interface.
+func (ts *TokenSource) RequireTransportSecurity() bool {
+	return true
 }
 
 // GetToken returns the existing Token if valid or refreshes and returns the new Token.
