@@ -17,6 +17,8 @@ import (
 	"github.com/google/uuid"
 )
 
+const MetadataAuthorizationField string = "authorization"
+
 const timestampFormat string = "Mon Jan 2 15:04:05 MST 2006"
 
 // Token holds the credentials received from Cognito
@@ -45,7 +47,7 @@ func (t *Token) setAuthHeader(r *http.Request) {
 
 func (t *Token) getRequestMetadata() map[string]string {
 	metadata := make(map[string]string)
-	metadata["Authorization"] = t.TokenType + " " + t.IDToken
+	metadata[MetadataAuthorizationField] = t.TokenType + " " + t.IDToken
 	return metadata
 }
 
