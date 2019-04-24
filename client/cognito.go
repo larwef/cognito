@@ -9,11 +9,12 @@ import (
 
 // Config holds configuration info for the cognito http client
 type Config struct {
-	UserpoolID string
-	ClientID   string
-	Username   string
-	Password   string
-	AWSConfig  *aws.Config
+	UserpoolID               string
+	ClientID                 string
+	Username                 string
+	Password                 string
+	AWSConfig                *aws.Config
+	RequireTransportSecurity bool
 }
 
 // Client returns a new http.Client which will handle authentication with Cognito

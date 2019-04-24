@@ -83,9 +83,10 @@ func (ts *TokenSource) GetRequestMetadata(ctx context.Context, uri ...string) (m
 	return token.getRequestMetadata(), nil
 }
 
+// TODO: Make this default to true.
 // RequireTransportSecurity is used to implement PerRPCCredentials interface.
 func (ts *TokenSource) RequireTransportSecurity() bool {
-	return true
+	return ts.config.RequireTransportSecurity
 }
 
 // GetToken returns the existing Token if valid or refreshes and returns the new Token.
