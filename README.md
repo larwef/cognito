@@ -1,3 +1,5 @@
+[![Go Report Card](https://goreportcard.com/badge/github.com/rejlersembriq/cognito)](https://goreportcard.com/report/github.com/rejlersembriq/cognito)
+
 # Cognito
 Library to obtain and verify JWT tokens from AWS Cognito.
 
