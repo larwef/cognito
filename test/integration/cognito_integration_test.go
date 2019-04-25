@@ -5,7 +5,7 @@ package integration
 import (
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/larwef/cognito/client"
+	"github.com/rejlersembriq/cognito/client"
 	"io/ioutil"
 	"net/http"
 	"testing"

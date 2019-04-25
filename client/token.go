@@ -17,7 +17,7 @@ import (
 	"github.com/google/uuid"
 )
 
-const MetadataAuthorizationField string = "authorization"
+const metadataAuthorizationFieldName string = "authorization"
 
 const timestampFormat string = "Mon Jan 2 15:04:05 MST 2006"
 
@@ -47,7 +47,7 @@ func (t *Token) setAuthHeader(r *http.Request) {
 
 func (t *Token) getRequestMetadata() map[string]string {
 	metadata := make(map[string]string)
-	metadata[MetadataAuthorizationField] = t.TokenType + " " + t.IDToken
+	metadata[metadataAuthorizationFieldName] = t.TokenType + " " + t.IDToken
 	return metadata
 }
 
@@ -85,8 +85,8 @@ func (ts *TokenSource) GetRequestMetadata(ctx context.Context, uri ...string) (m
 	return token.getRequestMetadata(), nil
 }
 
-// TODO: Make this default to true.
 // RequireTransportSecurity is used to implement PerRPCCredentials interface.
+// TODO: Make this default to true.
 func (ts *TokenSource) RequireTransportSecurity() bool {
 	return ts.config.RequireTransportSecurity
 }

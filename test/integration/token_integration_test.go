@@ -4,7 +4,7 @@ package integration
 
 import (
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/larwef/cognito/client"
+	"github.com/rejlersembriq/cognito/client"
 	"testing"
 	"time"
 )
