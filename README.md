@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/rejlersembriq/cognito.svg?branch=master)](https://travis-ci.org/rejlersembriq/cognito)
 [![Go Report Card](https://goreportcard.com/badge/github.com/rejlersembriq/cognito)](https://goreportcard.com/report/github.com/rejlersembriq/cognito)
 
 # Cognito
