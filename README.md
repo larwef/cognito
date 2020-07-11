@@ -1,5 +1,4 @@
-[![Build Status](https://travis-ci.org/rejlersembriq/cognito.svg?branch=master)](https://travis-ci.org/rejlersembriq/cognito)
-[![Go Report Card](https://goreportcard.com/badge/github.com/rejlersembriq/cognito)](https://goreportcard.com/report/github.com/rejlersembriq/cognito)
+[![Go Report Card](https://goreportcard.com/badge/github.com/larwef/cognito)](https://goreportcard.com/report/github.com/larwef/cognito)
 
 # Cognito
 Library to obtain and verify JWT tokens from AWS Cognito.

@@ -3,7 +3,7 @@
 package integration
 
 import (
-	"github.com/rejlersembriq/cognito/verifier"
+	"github.com/larwef/cognito/verifier"
 	"testing"
 )
 
